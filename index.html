@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>వివాహ మహోత్సవం — Rahul & Priya</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --maroon: #6b0f1a;
+            --maroon-deep: #4a0a12;
+            --maroon-light: #8b1a2a;
+            --gold: #c9a227;
+            --gold-bright: #e8c84a;
+            --gold-dim: #a08020;
+            --ivory: #f7f0e0;
+            --ivory-warm: #f0e6d0;
+            --cream: #faf5eb;
+            --dark: #2c1810;
+            --leaf: #4a7c59;
+            --leaf-light: #6b9e7a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--ivory);
+            color: var(--dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--ivory); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+        /* ═══════════════════════════════════════
+           GANESH INTRO OVERLAY
+        ═══════════════════════════════════════ */
+        .intro-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: radial-gradient(ellipse at center, var(--maroon-light) 0%, var(--maroon) 40%, var(--maroon-deep) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s;
+            overflow: hidden;
+        }
+        .intro-overlay.exiting {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--gold);
+            opacity: 0;
+            pointer-events: none;
+            animation: particleFloat linear infinite;
+        }
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        /* Ganesha */
+        .ganesha-container {
+            position: relative;
+            text-align: center;
+            z-index: 2;
+            cursor: pointer;
+            padding: 40px;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ganesha-container:hover { transform: scale(1.02); }
+
+        .ganesha-icon {
+            font-size: 6rem;
+            display: block;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 0 30px rgba(201, 162, 39, 0.5)) drop-shadow(0 0 60px rgba(201, 162, 39, 0.2));
+            animation: ganeshaEntry 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards, gentleFloat 4s ease-in-out infinite 1.5s;
+            opacity: 0;
+        }
+        @keyframes ganeshaEntry {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Aura ring */
+        .aura-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -65%);
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            animation: auraPulse 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .aura-ring::before {
+            content: '';
+            position: absolute;
+            inset: 15px;
+            border-radius: 50%;
+            border: 1px solid rgba(201, 162, 39, 0.15);
+        }
+        @keyframes auraPulse {
+            0%, 100% { transform: translate(-50%, -65%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -65%) scale(1.1); opacity: 1; }
+        }
+
+        .intro-shloka {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold);
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 0.8s;
+        }
+        .intro-title {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--ivory);
+            font-size: 1.6rem;
+            font-weight: 300;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 1s;
+        }
+
+        .tap-button {
+            position: relative;
+            padding: 16px 50px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 1.3s;
+        }
+        .tap-button:hover {
+            background: var(--gold);
+            color: var(--maroon-deep);
+        }
+        .tap-button .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(201, 162, 39, 0.4);
+            transform: scale(0);
+            animation: rippleEffect 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes rippleEffect {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ═══════════════════════════════════════
+           MAIN CONTENT (Hidden initially)
+        ═══════════════════════════════════════ */
+        .main-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+        }
+        .main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ═══════════════════════════════════════
+           NAVIGATION
+        ═══════════════════════════════════════ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s ease;
+        }
+        .nav.scrolled {
+            background: rgba(107, 15, 26, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 12px 30px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+        }
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold);
+            font-size: 1rem;
+            letter-spacing: 3px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--ivory);
+            text-decoration: none;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover { opacity: 1; color: var(--gold); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* ═══════════════════════════════════════
+           HERO SECTION
+        ═══════════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--maroon) 0%, var(--maroon-light) 50%, #9e1b32 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 80px;
+            overflow: hidden;
+        }
+
+        /* Temple pillar borders */
+        .hero::before, .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 60px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 800'%3E%3Cpath d='M10,0 L10,800 M50,0 L50,800 M10,40 Q30,25 50,40 M10,760 Q30,775 50,760' stroke='%23c9a227' stroke-width='0.8' fill='none' opacity='0.25'/%3E%3C/svg%3E");
+            background-repeat: repeat-y;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .hero::before { left: 0; }
+        .hero::after { right: 0; }
+
+        /* Toran (garland) at top */
+        .toran {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100'%3E%3Cpath d='M0,50 Q30,20 60,50 Q90,80 120,50 Q150,20 180,50 Q210,80 240,50 Q270,20 300,50 Q330,80 360,50 Q390,20 420,50 Q450,80 480,50 Q510,20 540,50 Q570,80 600,50 Q630,20 660,50 Q690,80 720,50 Q750,20 780,50 Q810,80 840,50 Q870,20 900,50 Q930,80 960,50 Q990,20 1020,50 Q1050,80 1080,50 Q1110,20 1140,50 Q1170,80 1200,50' stroke='%23c9a227' stroke-width='1' fill='none' opacity='0.3'/%3E%3C/svg%3E") top center repeat-x;
+            background-size: 300px 100px;
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        /* Couple Photo Frame */
+        .couple-frame {
+            position: relative;
+            width: 280px;
+            height: 340px;
+            margin: 0 auto 35px;
+        }
+        .couple-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,162,39,0.3);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .couple-frame:hover img {
+            transform: scale(1.03);
+        }
+        /* Outer decorative border */
+        .couple-frame::before {
+            content: '';
+            position: absolute;
+            inset: -12px;
+            border: 1px solid rgba(201, 162, 39, 0.4);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+        /* Corner ornaments */
+        .couple-frame .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--gold);
+            border-style: solid;
+            pointer-events: none;
+        }
+        .couple-frame .corner.tl { top: -8px; left: -8px; border-width: 2px 0 0 2px; }
+        .couple-frame .corner.tr { top: -8px; right: -8px; border-width: 2px 2px 0 0; }
+        .couple-frame .corner.bl { bottom: -8px; left: -8px; border-width: 0 0 2px 2px; }
+        .couple-frame .corner.br { bottom: -8px; right: -8px; border-width: 0 2px 2px 0; }
+
+        /* Mango leaf decoration below photo */
+        .mango-leaves {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            opacity: 0.7;
+        }
+
+        .hero-tagline {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold);
+            font-size: 0.95rem;
+            font-style: italic;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .hero-names {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 6vw, 3.8rem);
+            color: #fff;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.3);
+        }
+        .hero-names .telugu-name {
+            display: block;
+            font-size: 0.55em;
+            color: var(--gold);
+            margin-top: 6px;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .hero-weds {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--gold);
+            font-style: italic;
+            margin: 12px 0;
+            letter-spacing: 2px;
+        }
+
+        .hero-date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--ivory);
+            letter-spacing: 4px;
+            margin-top: 20px;
+            font-weight: 300;
+        }
+        .hero-date .telugu-date {
+            display: block;
+            font-size: 0.85em;
+            color: var(--gold);
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
+
+        /* Scroll hint */
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.6;
+        }
+        .scroll-hint span {
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        /* ═══════════════════════════════════════
+           SECTIONS
+        ═══════════════════════════════════════ */
+        section {
+            padding: 100px 20px;
+            position: relative;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .section-header .label {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold);
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .section-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            color: var(--maroon);
+            font-weight: 400;
+        }
+        .section-header .divider {
+            width: 50px;
+            height: 2px;
+            background: var(--gold);
+            margin: 18px auto 0;
+            position: relative;
+        }
+        .section-header .divider::before,
+        .section-header .divider::after {
+            content: '❦';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            color: var(--gold);
+        }
+        .section-header .divider::before { left: -20px; }
+        .section-header .divider::after { right: -20px; }
+
+        /* ═══════════════════════════════════════
+           PARENTS SECTION
+        ═══════════════════════════════════════ */
+        .parents-section {
+            background: var(--ivory-warm);
+            text-align: center;
+        }
+
+        .parents-card {
+            background: #fff;
+            border: 1px solid var(--gold);
+            padding: 50px 40px;
+            position: relative;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.06);
+        }
+        .parents-card::before,
+        .parents-card::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-color: var(--gold);
+            border-style: solid;
+        }
+        .parents-card::before { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+        .parents-card::after { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+
+        .parents-row {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+        .parent-side {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+        }
+        .parent-side .side-label {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .parent-side .relation {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: var(--warm-gray);
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        .parent-side .names {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            color: var(--maroon);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .parents-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 35px 0;
+        }
+        .parents-divider .line {
+            flex: 1;
+            height: 1px;
+            max-width: 100px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        .parents-divider .icon {
+            margin: 0 20px;
+            font-size: 1.5rem;
+            color: var(--gold);
+        }
+
+        /* ═══════════════════════════════════════
+           INVITATION MESSAGE
+        ═══════════════════════════════════════ */
+        .invitation-section {
+            background: var(--cream);
+            text-align: center;
+        }
+
+        .invitation-message {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .invitation-message p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            line-height: 2.4;
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+        .invitation-message .telugu-text {
+            display: block;
+            color: var(--maroon);
+            font-size: 1.15rem;
+            margin: 30px 0;
+            letter-spacing: 0.5px;
+        }
+        .invitation-message .blessing {
+            display: block;
+            margin-top: 40px;
+            color: var(--gold);
+            font-style: italic;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        /* ═══════════════════════════════════════
+           STORY SECTION
+        ═══════════════════════════════════════ */
+        .story-section {
+            background: var(--ivory-warm);
+            text-align: center;
+        }
+        .story-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            line-height: 2.2;
+            color: var(--dark);
+            max-width: 600px;
+            margin: 0 auto;
+            font-style: italic;
+        }
+        .story-text .highlight {
+            color: var(--maroon);
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        /* ═══════════════════════════════════════
+           GALLERY
+        ═══════════════════════════════════════ */
+        .gallery-section {
+            background: var(--cream);
+            text-align: center;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+        }
+        .gallery-item:nth-child(2) {
+            grid-row: span 2;
+            aspect-ratio: auto;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.5s;
+            filter: saturate(0.9);
+        }
+        .gallery-item:hover img {
+            transform: scale(1.08);
+            filter: saturate(1.1);
+        }
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            pointer-events: none;
+            transition: border-color 0.3s;
+        }
+        .gallery-item:hover::after {
+            border-color: rgba(201, 162, 39, 0.6);
+        }
+
+        /* ═══════════════════════════════════════
+           VENUE SECTION
+        ═══════════════════════════════════════ */
+        .venue-section {
+            background: linear-gradient(180deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+            color: var(--ivory);
+            text-align: center;
+            position: relative;
+        }
+        .venue-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--cream), transparent);
+        }
+        .venue-section .section-header .label { color: var(--gold); }
+        .venue-section .section-header h2 { color: #fff; }
+        .venue-section .section-header .divider { background: var(--gold); }
+
+        .venue-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(5px);
+            transition: all 0.4s;
+        }
+        .venue-card:hover {
+            border-color: rgba(201, 162, 39, 0.6);
+            background: rgba(255,255,255,0.08);
+        }
+        .venue-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+        .venue-address {
+            font-size: 0.95rem;
+            color: var(--ivory-warm);
+            line-height: 1.9;
+            letter-spacing: 0.5px;
+        }
+
+        .map-wrapper {
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        .map-wrapper iframe {
+            width: 100%;
+            height: 320px;
+            border: none;
+            filter: grayscale(100%) contrast(1.1) brightness(0.85) sepia(0.2);
+            display: block;
+        }
+
+        .venue-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+            padding: 14px 40px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.4s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .venue-btn:hover {
+            background: var(--gold);
+            color: var(--maroon-deep);
+        }
+
+        /* ═══════════════════════════════════════
+           BLESSING FOOTER
+        ═══════════════════════════════════════ */
+        .blessing-footer {
+            background: var(--ivory);
+            text-align: center;
+            padding: 60px 20px;
+            border-top: 1px solid rgba(201, 162, 39, 0.15);
+        }
+        .blessing-footer .om {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--gold);
+        }
+        .blessing-footer p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--dark);
+            font-style: italic;
+            line-height: 1.8;
+        }
+        .blessing-footer .footer-names {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        /* ═══════════════════════════════════════
+           MUSIC TOGGLE
+        ═══════════════════════════════════════ */
+        .music-toggle {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--maroon);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 1.1rem;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .music-toggle:hover {
+            background: var(--gold);
+            color: var(--maroon);
+            transform: scale(1.1);
+        }
+        .music-toggle.playing {
+            animation: spin 4s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ═══════════════════════════════════════
+           SCROLL REVEAL
+        ═══════════════════════════════════════ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ═══════════════════════════════════════
+           RESPONSIVE
+        ═══════════════════════════════════════ */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .ganesha-icon { font-size: 4.5rem; }
+            .intro-title { font-size: 1.2rem; letter-spacing: 4px; }
+            .couple-frame { width: 220px; height: 270px; }
+            .parents-row { gap: 30px; }
+            .parent-side { min-width: 100%; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-item:nth-child(2) { grid-row: span 1; aspect-ratio: 3/4; }
+            section { padding: 70px 20px; }
+            .map-wrapper iframe { height: 250px; }
+            .invitation-message p { font-size: 1.05rem; line-height: 2.2; }
+        }
+        @media (max-width: 400px) {
+            .couple-frame { width: 180px; height: 220px; }
+            .hero-names { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════
+         GANESH INTRO OVERLAY
+    ═══════════════════════════════════════ -->
+    <div class="intro-overlay" id="introOverlay">
+        <!-- Particles generated by JS -->
+        <div class="aura-ring"></div>
+        <div class="ganesha-container" id="ganeshaContainer" onclick="enterSite(event)">
+            <div class="ganesha-icon">🙏</div>
+            <div class="intro-shloka">॥ శ్రీ గణేశాయ నమః ॥</div>
+            <div class="intro-title">వివాహ మహోత్సవం</div>
+            <button class="tap-button" id="tapButton">
+                <span>శుభారంభం</span>
+                <span style="display:block; font-size:0.7em; margin-top:4px; opacity:0.7;">Tap to Begin</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         MAIN CONTENT
+    ═══════════════════════════════════════ -->
+    <div class="main-content" id="mainContent">
+
+        <!-- Navigation -->
+        <nav class="nav" id="nav">
+            <div class="nav-logo">వివాహ పత్రిక</div>
+            <ul class="nav-links">
+                <li><a href="#parents">Parents</a></li>
+                <li><a href="#invitation">Invitation</a></li>
+                <li><a href="#venue">Venue</a></li>
+            </ul>
+        </nav>
+
+        <!-- Hero -->
+        <header class="hero">
+            <div class="toran"></div>
+            <div class="hero-inner">
+                <div class="couple-frame reveal">
+                    <div class="corner tl"></div>
+                    <div class="corner tr"></div>
+                    <div class="corner bl"></div>
+                    <div class="corner br"></div>
+                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=750&fit=crop" alt="Rahul & Priya">
+                </div>
+
+                <div class="mango-leaves reveal">🌿 🌿 🌿</div>
+
+                <div class="hero-tagline reveal">With the blessings of our parents, we invite you to share in our joy</div>
+
+                <h1 class="hero-names reveal">
+                    Rahul
+                    <span class="telugu-name">రాహుల్</span>
+                </h1>
+                <div class="hero-weds reveal">&</div>
+                <h1 class="hero-names reveal">
+                    Priya
+                    <span class="telugu-name">ప్రియా</span>
+                </h1>
+
+                <div class="hero-date reveal">
+                    12 December 2026
+                    <span class="telugu-date">డిసెంబర్ 12, 2026</span>
+                </div>
+            </div>
+            <div class="scroll-hint">
+                <span>Scroll</span>
+                <div class="scroll-line"></div>
+            </div>
+        </header>
+
+        <!-- Parents -->
+        <section class="parents-section" id="parents">
+            <div class="container">
+                <div class="section-header reveal">
+                    <div class="label">మా కుటుంబాలు</div>
+                    <h2>Our Families</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="parents-card reveal">
+                    <div class="parents-row">
+                        <div class="parent-side">
+                            <div class="side-label">Groom</div>
+                            <div class="relation">S/o</div>
+                            <div class="names">
+                                Sri Venkatesh Sharma<br>
+                                &<br>
+                                Smt. Lakshmi Sharma
+                            </div>
+                        </div>
+
+                        <div class="parents-divider">
+                            <div class="line"></div>
+                            <div class="icon">❦</div>
+                            <div class="line"></div>
+                        </div>
+
+                        <div class="parent-side">
+                            <div class="side-label">Bride</div>
+                            <div class="relation">D/o</div>
+                            <div class="names">
+                                Sri Ramesh Reddy<br>
+                                &<br>
+                                Smt. Padma Reddy
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Invitation -->
+        <section class="invitation-section" id="invitation">
+            <div class="container">
+                <div class="section-header reveal">
+                    <div class="label">ఆహ్వానం</div>
+                    <h2>Invitation</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="invitation-message reveal">
+                    <p>
+                        We, <strong style="color:var(--maroon);">Rahul Sharma</strong> and <strong style="color:var(--maroon);">Priya Reddy</strong>, 
+                        along with our beloved families, humbly request the honor of your presence 
+                        as we unite in the sacred bond of marriage.
+                    </p>
+                    <p class="telugu-text">
+                        శ్రీ వేంకటేశ్వర స్వామి వారి ఆశీస్సులతో,<br>
+                        మా వివాహ మహోత్సవానికి మీ ఆహ్వానం.<br>
+                        మీ సాన్నిహిత్యమే మాకు అత్యంత విలువైన వరం.
+                    </p>
+                    <p>
+                        Your presence and blessings are the greatest gifts we could receive. 
+                        We eagerly await the joy of celebrating this sacred occasion with you.
+                    </p>
+                    <span class="blessing">
+                        శ్రీమతే వేంకటేశాయ నమః<br>
+                        <em>With reverence to Lord Venkateswara</em>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Story -->
+        <section class="story-section" id="story">
+            <div class="container">
+                <div class="section-header reveal">
+                    <div class="label">మా కథ</div>
+                    <h2>Our Story</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="story-text reveal">
+                    What began as a chance meeting in Hyderabad blossomed into a love 
+                    that felt written in the stars. Through every season, our bond only 
+                    grew stronger — rooted in respect, laughter, and shared dreams. 
+                    <span class="highlight">On December 12th, we begin our forever.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery -->
+        <section class="gallery-section" id="gallery">
+            <div class="container">
+                <div class="section-header reveal">
+                    <div class="label">జ్ఞాపకాలు</div>
+                    <h2>Moments</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="gallery-grid">
+                    <div class="gallery-item reveal">
+                        <img src="https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=400&h=500&fit=crop" alt="Moment 1">
+                    </div>
+                    <div class="gallery-item reveal">
+                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=800&fit=crop" alt="Moment 2">
+                    </div>
+                    <div class="gallery-item reveal">
+                        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&h=500&fit=crop" alt="Moment 3">
+                    </div>
+                    <div class="gallery-item reveal">
+                        <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=400&h=500&fit=crop" alt="Moment 4">
+                    </div>
+                    <div class="gallery-item reveal">
+                        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=500&fit=crop" alt="Moment 5">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Venue -->
+        <section class="venue-section" id="venue">
+            <div class="container">
+                <div class="section-header reveal">
+                    <div class="label">వేదిక</div>
+                    <h2>The Venue</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="venue-card reveal">
+                    <div class="venue-name">Grand Palace</div>
+                    <div class="venue-address">
+                        Necklace Road, Hyderabad<br>
+                        Telangana — 500004
+                    </div>
+                </div>
+
+                <div class="map-wrapper reveal">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.8!2d78.47!3d17.42!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDI1JzEyLjAiTiA3OMKwMjgnMTIuMCJF!5e0!3m2!1sen!2sin!4v1600000000000!5m2!1sen!2sin" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+
+                <a href="https://maps.google.com/?q=Grand+Palace+Hyderabad" target="_blank" class="venue-btn reveal">
+                    📍 Open in Maps
+                </a>
+            </div>
+        </section>
+
+        <!-- Blessing Footer -->
+        <footer class="blessing-footer">
+            <div class="om">🕉️</div>
+            <p>
+                శ్రీమతే వేంకటేశాయ నమః<br>
+                <em>We seek your blessings on this sacred journey</em>
+            </p>
+            <div class="footer-names">Rahul & Priya · 12.12.2026</div>
+        </footer>
+
+    </div><!-- /main-content -->
+
+    <!-- Music -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <button class="music-toggle" id="musicBtn" onclick="toggleMusic()">🎵</button>
+
+    <script>
+        // ═══════════════════════════════════════
+        // PARTICLES
+        // ═══════════════════════════════════════
+        function createParticles() {
+            const overlay = document.getElementById('introOverlay');
+            for (let i = 0; i < 25; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 4 + 2;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+                p.style.animationDelay = (Math.random() * 5) + 's';
+                overlay.appendChild(p);
+            }
+        }
+        createParticles();
+
+        // ═══════════════════════════════════════
+        // ENTER SITE
+        // ═══════════════════════════════════════
+        function enterSite(e) {
+            const overlay = document.getElementById('introOverlay');
+            const main = document.getElementById('mainContent');
+            const btn = e.target.closest('.tap-button') || document.getElementById('tapButton');
+
+            // Ripple effect
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            const rect = btn.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+            ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+            btn.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+
+            // Transition
+            setTimeout(() => {
+                overlay.classList.add('exiting');
+                main.classList.add('visible');
+                document.body.style.overflow = 'auto';
+            }, 400);
+        }
+
+        // ═══════════════════════════════════════
+        // NAV SCROLL
+        // ═══════════════════════════════════════
+        window.addEventListener('scroll', () => {
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ═══════════════════════════════════════
+        // SCROLL REVEAL
+        // ═══════════════════════════════════════
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('active'), i * 80);
+                }
+            });
+        }, { threshold: 0.12 });
+        reveals.forEach(el => observer.observe(el));
+
+        // ═══════════════════════════════════════
+        // MUSIC
+        // ═══════════════════════════════════════
+        const music = document.getElementById('bgMusic');
+        const mBtn = document.getElementById('musicBtn');
+        let playing = false;
+        function toggleMusic() {
+            if (playing) {
+                music.pause();
+                mBtn.classList.remove('playing');
+                mBtn.textContent = '🎵';
+            } else {
+                music.play().catch(e => console.log(e));
+                mBtn.classList.add('playing');
+                mBtn.textContent = '🎶';
+            }
+            playing = !playing;
+        }
+    </script>
+</body>
+</html>
